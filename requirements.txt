@@ -1,0 +1,15 @@
+# Selenium para automação de navegador
+selenium>=4.15.0,<5.0.0
+
+# pyodbc para conexão com SQL Server (opcional)
+pyodbc>=4.0.39,<5.0.0
+
+# Manipulação de dados
+pandas>=2.0.0
+numpy>=1.26.0
+
+# Carregar variáveis de ambiente do .env (opcional)
+python-dotenv>=1.0.0
+
+# Testes
+pytest>=8.0.0

@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+
+# Ambiente virtual
+venv/
+.env
+
+# Dados baixados
+downloads/
+*.zip
+*.csv
+
+# Logs
+logs/
+*.log
+
+# Binários
+msedgedriver.exe
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
