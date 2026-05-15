@@ -3,7 +3,7 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(encoding="utf-8-sig")
 from utils.unzipper import extrair_arquivos_especificos
 from utils.selenium_extractor import extracao_bases_telegram
 from utils.file_manager import (excluir_csvs_da_pasta,excluir_zips_antigos)
@@ -57,8 +57,11 @@ def main():
         logger.info("Download das bases concluído")
 
         # 3. Extrair CSVs específicos dos zips
-        extrair_arquivos_especificos(DIRETORIO_DOWNLOADS)
-        logger.info("Extração de arquivos específicos concluída")
+        total = extrair_arquivos_especificos(DIRETORIO_DOWNLOADS)
+
+        if total == 0:
+            logger.error("Nenhum arquivo foi extraído — processo finalizado com erros")
+            return
 
         logger.info("Processo finalizado com sucesso")
 

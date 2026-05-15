@@ -22,8 +22,9 @@ def mes_do_zip(nome_arquivo):
         return "MesDesconhecido"
 
 
-def extrair_arquivos_especificos(pasta: str):
+def extrair_arquivos_especificos(pasta: str) -> int:
     arquivos = os.listdir(pasta)
+    total_extraidos = 0
 
     for arquivo in arquivos:
         caminho_zip = os.path.join(pasta, arquivo)
@@ -56,12 +57,14 @@ def extrair_arquivos_especificos(pasta: str):
                     destino = os.path.join(pasta, f"messaging_inbound_{mes}.csv")
                     with zip_ref.open(nome) as origem, open(destino, "wb") as saida:
                         saida.write(origem.read())
+                    total_extraidos += 1
                     logger.info(f"Extraído {nome} de {arquivo} para {destino}")
                 elif len(messaging_files) > 1:
                     for i, nome in enumerate(messaging_files, start=1):
                         destino = os.path.join(pasta, f"messaging_inbound_{mes}_{i}.csv")
                         with zip_ref.open(nome) as origem, open(destino, "wb") as saida:
                             saida.write(origem.read())
+                        total_extraidos += 1
                         logger.info(f"Extraído {nome} de {arquivo} para {destino}")
 
                 # --- Activity Timeline ---
@@ -70,13 +73,22 @@ def extrair_arquivos_especificos(pasta: str):
                     destino = os.path.join(pasta, f"activity_timeline_{mes}.csv")
                     with zip_ref.open(nome) as origem, open(destino, "wb") as saida:
                         saida.write(origem.read())
+                    total_extraidos += 1
                     logger.info(f"Extraído {nome} de {arquivo} para {destino}")
                 elif len(activity_files) > 1:
                     for i, nome in enumerate(activity_files, start=1):
                         destino = os.path.join(pasta, f"activity_timeline_{mes}_{i}.csv")
                         with zip_ref.open(nome) as origem, open(destino, "wb") as saida:
                             saida.write(origem.read())
+                        total_extraidos += 1
                         logger.info(f"Extraído {nome} de {arquivo} para {destino}")
 
         except Exception as e:
             logger.error(f"Erro ao extrair {arquivo}: {e}")
+
+    if total_extraidos == 0:
+        logger.warning("Nenhum arquivo CSV foi extraído — verifique se os arquivos ZIP estão presentes e válidos")
+    else:
+        logger.info(f"Extração concluída: {total_extraidos} arquivo(s) extraído(s)")
+
+    return total_extraidos
