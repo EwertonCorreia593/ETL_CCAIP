@@ -22,7 +22,15 @@ def mes_do_zip(nome_arquivo):
         return "MesDesconhecido"
 
 
-def extrair_arquivos_especificos(pasta: str) -> int:
+def extrair_arquivos_especificos(pasta: str, destino_messaging: str | None = None, destino_activity: str | None = None) -> int:
+    if destino_messaging is None:
+        destino_messaging = pasta
+    if destino_activity is None:
+        destino_activity = pasta
+
+    os.makedirs(destino_messaging, exist_ok=True)
+    os.makedirs(destino_activity, exist_ok=True)
+
     arquivos = os.listdir(pasta)
     total_extraidos = 0
 
@@ -54,14 +62,14 @@ def extrair_arquivos_especificos(pasta: str) -> int:
                 # --- Messaging Inbound ---
                 if len(messaging_files) == 1:
                     nome = messaging_files[0]
-                    destino = os.path.join(pasta, f"messaging_inbound_{mes}.csv")
+                    destino = os.path.join(destino_messaging, f"messaging_inbound_{mes}.csv")
                     with zip_ref.open(nome) as origem, open(destino, "wb") as saida:
                         saida.write(origem.read())
                     total_extraidos += 1
                     logger.info(f"Extraído {nome} de {arquivo} para {destino}")
                 elif len(messaging_files) > 1:
                     for i, nome in enumerate(messaging_files, start=1):
-                        destino = os.path.join(pasta, f"messaging_inbound_{mes}_{i}.csv")
+                        destino = os.path.join(destino_messaging, f"messaging_inbound_{mes}_{i}.csv")
                         with zip_ref.open(nome) as origem, open(destino, "wb") as saida:
                             saida.write(origem.read())
                         total_extraidos += 1
@@ -70,14 +78,14 @@ def extrair_arquivos_especificos(pasta: str) -> int:
                 # --- Activity Timeline ---
                 if len(activity_files) == 1:
                     nome = activity_files[0]
-                    destino = os.path.join(pasta, f"activity_timeline_{mes}.csv")
+                    destino = os.path.join(destino_activity, f"activity_timeline_{mes}.csv")
                     with zip_ref.open(nome) as origem, open(destino, "wb") as saida:
                         saida.write(origem.read())
                     total_extraidos += 1
                     logger.info(f"Extraído {nome} de {arquivo} para {destino}")
                 elif len(activity_files) > 1:
                     for i, nome in enumerate(activity_files, start=1):
-                        destino = os.path.join(pasta, f"activity_timeline_{mes}_{i}.csv")
+                        destino = os.path.join(destino_activity, f"activity_timeline_{mes}_{i}.csv")
                         with zip_ref.open(nome) as origem, open(destino, "wb") as saida:
                             saida.write(origem.read())
                         total_extraidos += 1

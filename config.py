@@ -13,6 +13,19 @@ DIRETORIO_DOWNLOADS = DIRETORIO_ORIGEM
 # Cria a pasta de downloads se não existir
 os.makedirs(DIRETORIO_ORIGEM, exist_ok=True)
 
+########### DIRETÓRIOS DE SAÍDA (CSVs processados) ###########
+# Diretório específico para messaging_inbound (opcional)
+# Se não informado, o CSV fica na mesma pasta do ZIP
+DIRETORIO_MESSAGING = os.getenv("CCAI_DIRETORIO_MESSAGING")
+if DIRETORIO_MESSAGING:
+    os.makedirs(DIRETORIO_MESSAGING, exist_ok=True)
+
+# Diretório específico para activity_timeline (opcional)
+# Se não informado, o CSV fica na mesma pasta do ZIP
+DIRETORIO_ACTIVITY = os.getenv("CCAI_DIRETORIO_ACTIVITY")
+if DIRETORIO_ACTIVITY:
+    os.makedirs(DIRETORIO_ACTIVITY, exist_ok=True)
+
 ########### URLS ###########
 URL_HOME = "https://bot-gare-vtal-iu1ezbt.sae1.ccaiplatform.com/sign-in"
 URL_RELATORIOS_TELEGRAM = "https://bot-gare-vtal-iu1ezbt.sae1.ccaiplatform.com/reports/communication"
