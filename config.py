@@ -1,5 +1,5 @@
 import os
-from datetime import date
+from datetime import date, timedelta
 
 ########### DIRETÓRIO RAIZ ###########
 # Caminho absoluto para a pasta do projeto
@@ -35,12 +35,14 @@ DOWNLOAD_TIMEOUT = int(os.getenv("CCAI_DOWNLOAD_TIMEOUT", "900"))
 ########### DATAS ###########
 hoje = date.today()
 
-if hoje.day <= 5:
-    if hoje.month == 1:
-        data_inicio = date(hoje.year - 1, 12, 1)
-    else:
-        data_inicio = date(hoje.year, hoje.month - 1, 1)
-else:
-    data_inicio = date(hoje.year, hoje.month, 1)
+# Reprocessamento manual: se as env vars estiverem setadas, usa as datas customizadas
+data_inicio_env = os.getenv("CCAI_DATA_INICIO")
+data_final_env = os.getenv("CCAI_DATA_FINAL")
 
-data_final = hoje
+if data_inicio_env and data_final_env:
+    data_inicio = date.fromisoformat(data_inicio_env)
+    data_final = date.fromisoformat(data_final_env)
+else:
+    # Padrão: últimos 5 dias
+    data_inicio = hoje - timedelta(days=5)
+    data_final = hoje
